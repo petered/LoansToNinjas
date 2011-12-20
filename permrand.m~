@@ -1,7 +1,0 @@
-function permrand(n,k)
-% Because R2010 still has the clumsy randperm syntax.  See 2011
-% documentation
-
-
-
-
