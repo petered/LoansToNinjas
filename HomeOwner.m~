@@ -146,7 +146,7 @@ classdef HomeOwner < DataBaseItem
                 action='default';
                 
             elseif H.forSale        % If it's already for sale, keep it for sale, but lower price cause you're getting desperate
-                action='sell';
+                action='keepForSale';
             else 
                 c=A.forecastCash(A.panicHorizon);  % Forcase cash flow up to panicHorizon
                 if all(c>0),        % If you can make the payments...
@@ -173,11 +173,8 @@ classdef HomeOwner < DataBaseItem
                     A.payMortgage;
                 case 'sell'
                     A.payMortgage;
-                    if ~isempty(A.M)
-                        minsaleprice=H.M.principal-A.cash+.01;
-                    else 
-                        minsaleprice=-Inf;
-                    end
+                    
+                    minsaleprice=H.M.principal-A.cash;
                     A.putForSale(H,minsaleprice);
                     
 
@@ -419,7 +416,7 @@ classdef HomeOwner < DataBaseItem
             if ~exist('minprice','var'), minprice=-Inf; end
                 
             if H.forSale
-                H.price=max(H.price*(1-A.salePanic),minprice);     
+                H.price=max(A.price*(1-A.salePanic),minprice);     
             else
                 H.forSale=true;
                 H.price=max((1+A.saleMarkup)*A.H.value,minprice);      
